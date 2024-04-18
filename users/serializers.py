@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User
-
+from django.utils import timezone
+from django.db import models
 from dj_rest_auth.serializers import UserDetailsSerializer
 
 
@@ -51,3 +52,46 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
         exclude = ['is_superuser', 'is_staff', 'last_login', 'date_joined',
                    'is_active', 'password', 'groups', 'user_permissions']
         read_only_fields = ('id', )
+
+
+
+
+
+# reset_password
+
+# class PasswordResetSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+
+#     def validate_email(self, value):
+#         """
+#         Check if the email exists in the database.
+#         """
+#         if not User.objects.filter(email=value).exists():
+#             raise serializers.ValidationError("No user with that email address.")
+#         return value
+
+
+# class PasswordResetConfirmSerializer(serializers.Serializer):
+#     new_password = serializers.CharField(min_length=8, max_length=128)
+#     new_password_confirm = serializers.CharField(min_length=8, max_length=128)
+
+#     def validate(self, data):
+#         """
+#         Check if the new passwords match.
+#         """
+#         new_password = data.get('new_password')
+#         new_password_confirm = data.get('new_password_confirm')
+
+#         if new_password != new_password_confirm:
+#             raise serializers.ValidationError("The new passwords do not match.")
+#         return data
+
+
+
+
+# serializers.py
+
+
+# class OTPSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     otp = serializers.CharField(max_length=6)
