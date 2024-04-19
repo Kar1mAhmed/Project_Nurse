@@ -45,19 +45,23 @@ GENDER_CHOICES = [
         ('F', 'Female'),
         ]
 
+ROLE_CHOICES = (
+    ('patient', 'Patient'),
+    ('nurse', 'Nurse'),
+)
+
+
 
 class User(AbstractUser):
     username = models.CharField(max_length=11)
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
-    gender =models.CharField(max_length=20, choices=GENDER_CHOICES)
-
-    national_id = models.CharField(max_length=14)
-
-    national_id_image = models.ImageField(upload_to="images/" , null=True, blank=True)
-    selfie = models.ImageField(upload_to="D:\project-main\src\images", null=True, blank=True)
-    certificate = models.ImageField(upload_to="D:\project-main\src\images", null=True, blank=True)
+    national_id = models.CharField(max_length=14, blank=True)
+    national_id_image = models.URLField(default='image')
+    selfie = models.URLField(default='image')
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='patient')
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='Male')
 
     notification_token = models.CharField(max_length=255, null=True)
 
@@ -66,6 +70,8 @@ class User(AbstractUser):
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     is_active = models.BooleanField(default=True)
+
+
 
     USERNAME_FIELD = "email"
 
@@ -77,24 +83,32 @@ class User(AbstractUser):
         return self.email
 
 
+class Patient(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient')
+    date_of_birth = models.DateField(default="yy/mm/dd")
 
-#2nd_User 
 
-class BasicUser(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    address = models.CharField(max_length=100, null=True, blank=True)
-    dete_of_birth = models.DateField(default="yy/mm/dd")
-    
+
     
 
-    def __str__(self):
-        return self.user.email
+class Nurse(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='nurse')
+    certificate_image = models.URLField(default='image')
+    department = models.CharField(max_length=100)
 
 
 
-class Meta:
-    db_table = 'basic_user'
-  
+
+
+
+
+
+
+
+
+
+
+
 
 
 
